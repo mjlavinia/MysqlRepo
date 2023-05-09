@@ -42,11 +42,11 @@ class CLientInforAdminWithPage(admin.ModelAdmin):
         client = ClientInfo.objects.filter(id = obj.id).first()
         
         notif = Notifications()
-        haschanges = False;
+        haschanges = False
         if client.isactive != obj.isactive:
             haschanges = True
             if obj.isactive == False:
-                notif.message = 'The admin has made your account inactive. Please check with the admin the status of your acount.'
+                notif.message = 'The admin has made your account inactive. Please settle your account payment to reconnect your water supply.'
                 obj.switch = False
             else:
                 notif.message = 'The admin has activated your account.'
