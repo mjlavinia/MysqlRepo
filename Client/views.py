@@ -29,13 +29,15 @@ def index(request):
             year = setLastYear(datetime.date.today().year, datetime.date.today().month)
             month = setLastMonth(datetime.date.today().month)
             billing = Billing.objects.filter(meterid_id = client.id, billingyear = year, billingmonth = month).first()
+            billmonth = month
             if billing is None:
                 billing = Billing.objects.filter(meterid_id = client.id, billingyear = year, billingmonth = month-1).first()
+                billmonth = month-1
                 if billing is None:
                     billing = Billing(totalconsumed = 0,billingmonth = timezone.now().month-1, billingyear = timezone.now().year)
-                   
-            realtime = RealTimeBill.objects.filter(meterid_id = client.id, timestamp = datetime.date.today()).first()
-            
+                    billmonth = billing.billingmonth + 1
+                    realtime = RealTimeBill.objects.filter(meterid_id = client.id, timestamp = datetime.date.today()).first()
+        
         period =   calendar.month_name[billing.billingmonth] +' '+ str(client.billingday) + ',' + str(year) + " - " + calendar.month_name[billing.billingmonth +  1] +' '+  str(client.billingday) + ',' + str(year) 
 
         context = {
@@ -44,7 +46,7 @@ def index(request):
             'realtime': realtime,
             'user': current_user,
             'period':period,
-            'readdate': calendar.month_name[billing.billingmonth] +' '+ str(client.billingday) + ',' + str(year),
+            'readdate': calendar.month_name[billmonth] +' '+ str(client.billingday) + ',' + str(year),
             'prevtotal': billing.totalconsumed * Decimal(1.90)
         }
        
@@ -86,7 +88,7 @@ def dashboard(request):
 
 def chart(request):
     current_user = request
-    template = loader.get_template('client/chart.html')
+    template = loader.get_template('client/chart.htmll')
     client = ClientInfo.objects.filter(user_id = request.user.id).first()
     start_date = timezone.now() - datetime.timedelta(31)
     if client != None:
