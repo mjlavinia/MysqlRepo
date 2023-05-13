@@ -88,7 +88,7 @@ def dashboard(request):
 
 def chart(request):
     current_user = request
-    template = loader.get_template('client/chart.htmll')
+    template = loader.get_template('client/chart.html')
     client = ClientInfo.objects.filter(user_id = request.user.id).first()
     start_date = timezone.now() - datetime.timedelta(31)
     if client != None:
