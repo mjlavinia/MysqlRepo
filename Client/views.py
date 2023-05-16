@@ -146,7 +146,7 @@ def savingmeter(request, client, now):
 
             total  = Decimal(request.GET.get('total'))
             current  = Decimal(request.GET.get('current'))
-            newMeter = RealTimeBill(id = updateId ,meterid_id = client.id, totalconsumption = round(total/1000,3), timestamp = datetime.date.today(), currentread = current)
+            newMeter = RealTimeBill(id = updateId ,meterid_id = client.id, totalconsumption = round(total/1000,5), timestamp = datetime.date.today(), currentread = current)
             newMeter.switch = client.switch    
             addBillRecord(client.billingdate, newMeter)     
             newMeter.save()
@@ -247,7 +247,7 @@ def getmeter(request):
     realtimeRecord = RealTimeBill.objects.filter(meterid_id = id).order_by('-id').first()
     
     realtime = round(realtimeRecord.totalconsumption,2)
-    currentread = round(realtimeRecord.currentread,2) if realtimeRecord.meterid.isactive else '(DEACTIVATED)'
+    currentread = round(realtimeRecord.currentread,3) if realtimeRecord.meterid.isactive else '(DEACTIVATED)'
     # Return a JSON response of the data
     return JsonResponse({'isactive': realtimeRecord.meterid.isactive ,'switch':realtimeRecord.meterid.switch,'dateread': str((timezone.now())),'total':str(realtime), 'currentread':str(currentread),'amount': 'Php ' +  str(pricing(realtimeRecord.totalconsumption))})
 
