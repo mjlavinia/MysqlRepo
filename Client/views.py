@@ -246,8 +246,8 @@ def getmeter(request):
     id = request.GET.get('id')
     realtimeRecord = RealTimeBill.objects.filter(meterid_id = id).order_by('-id').first()
     
-    realtime = round(realtimeRecord.totalconsumption,2)
-    currentread = round(realtimeRecord.currentread,3) if realtimeRecord.meterid.isactive else '(DEACTIVATED)'
+    realtime = round(realtimeRecord.totalconsumption,3)
+    currentread = round(realtimeRecord.currentread,2) if realtimeRecord.meterid.isactive else '(DEACTIVATED)'
     # Return a JSON response of the data
     return JsonResponse({'isactive': realtimeRecord.meterid.isactive ,'switch':realtimeRecord.meterid.switch,'dateread': str((timezone.now())),'total':str(realtime), 'currentread':str(currentread),'amount': 'Php ' +  str(pricing(realtimeRecord.totalconsumption))})
 
