@@ -146,7 +146,7 @@ def savingmeter(request, client, now):
 
             total  = Decimal(request.GET.get('total'))
             current  = Decimal(request.GET.get('current'))
-            newMeter = RealTimeBill(id = updateId ,meterid_id = client.id, totalconsumption = round(total/1000,5), timestamp = datetime.date.today(), currentread = current)
+            newMeter = RealTimeBill(id = updateId ,meterid_id = client.id, totalconsumption = round(total/10,5), timestamp = datetime.date.today(), currentread = current)
             newMeter.switch = client.switch    
             addBillRecord(client.billingdate, newMeter)     
             newMeter.save()
